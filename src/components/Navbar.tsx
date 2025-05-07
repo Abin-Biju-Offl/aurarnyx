@@ -1,9 +1,12 @@
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Mic } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
+import { Button } from "./ui/button";
 
 export function Navbar() {
+  const location = useLocation();
+  
   return (
     <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -17,6 +20,18 @@ export function Navbar() {
           </span>
         </div>
         <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-1 mr-4">
+            <Link to="/">
+              <Button variant={location.pathname === '/' ? 'secondary' : 'ghost'}>
+                Home
+              </Button>
+            </Link>
+            <Link to="/analysis">
+              <Button variant={location.pathname === '/analysis' ? 'secondary' : 'ghost'}>
+                Analysis
+              </Button>
+            </Link>
+          </nav>
           <ModeToggle />
         </div>
       </div>
