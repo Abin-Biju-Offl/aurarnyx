@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { EmotionData, EmotionHistory, EmotionType } from '@/types/emotion';
+import { EmotionData, EmotionHistory, EmotionType, EmotionSummary } from '@/types/emotion';
 
 // Maximum history length
 const MAX_HISTORY_LENGTH = 100;
@@ -21,6 +21,8 @@ export function useEmotionDetection() {
     fear: [],
     neutral: []
   });
+
+  const [emotionSummary, setEmotionSummary] = useState<EmotionSummary | null>(null);
   
   // This is a simulation function that will be replaced with actual ML model in production
   const analyzeAudio = useCallback((audioData: Float32Array) => {
@@ -77,27 +79,64 @@ export function useEmotionDetection() {
       const confidenceScore = emotion.type === 'confidence' ? emotion.score : 0;
       newHistory.confidence = [
         ...prev.confidence,
-        { type: 'confidence', score: confidenceScore, timestamp }
+        { type: 'confidence' as EmotionType, score: confidenceScore, timestamp }
       ].slice(-MAX_HISTORY_LENGTH);
       
       // For fear
       const fearScore = emotion.type === 'fear' ? emotion.score : 0;
       newHistory.fear = [
         ...prev.fear,
-        { type: 'fear', score: fearScore, timestamp }
+        { type: 'fear' as EmotionType, score: fearScore, timestamp }
       ].slice(-MAX_HISTORY_LENGTH);
       
       // For neutral
       const neutralScore = emotion.type === 'neutral' ? emotion.score : 0;
       newHistory.neutral = [
         ...prev.neutral,
-        { type: 'neutral', score: neutralScore, timestamp }
+        { type: 'neutral' as EmotionType, score: neutralScore, timestamp }
       ].slice(-MAX_HISTORY_LENGTH);
       
       return newHistory;
     });
   }, [analyzeAudio]);
   
+  const generateEmotionSummary = useCallback(() => {
+    if (emotionHistory.confidence.length === 0) return null;
+    
+    // Calculate average scores
+    const avgConfidence = emotionHistory.confidence.reduce((sum, item) => sum + item.score, 0) / emotionHistory.confidence.length;
+    const avgFear = emotionHistory.fear.reduce((sum, item) => sum + item.score, 0) / emotionHistory.fear.length;
+    const avgNeutral = emotionHistory.neutral.reduce((sum, item) => sum + item.score, 0) / emotionHistory.neutral.length;
+    
+    // Generate improvement suggestions based on analysis
+    const suggestions: string[] = [];
+    
+    if (avgConfidence < 0.4) {
+      suggestions.push("Practice speaking with a stronger, more assertive tone.");
+      suggestions.push("Try maintaining a steady pace rather than rushing through your words.");
+      suggestions.push("Use more definitive language and fewer hedge words like 'maybe' or 'perhaps'.");
+    }
+    
+    if (avgFear > 0.4) {
+      suggestions.push("Take deeper breaths before speaking to reduce vocal tension.");
+      suggestions.push("Practice pausing more frequently to collect your thoughts.");
+      suggestions.push("Try visualization techniques to reduce anxiety while speaking.");
+    }
+    
+    if (avgNeutral > 0.6) {
+      suggestions.push("Add more vocal variety and emphasis on key points.");
+      suggestions.push("Incorporate more expressive language to engage your audience.");
+      suggestions.push("Consider using more hand gestures to complement your speech.");
+    }
+    
+    return {
+      overallConfidence: avgConfidence,
+      overallFear: avgFear,
+      overallNeutral: avgNeutral,
+      suggestions
+    };
+  }, [emotionHistory]);
+
   // This effect simulates periodic emotion updates for demonstration
   // In a real implementation, this would be triggered by actual audio analysis
   const [isSimulating, setIsSimulating] = useState(false);
@@ -115,14 +154,21 @@ export function useEmotionDetection() {
   }, [isSimulating, processAudioData]);
   
   const startSimulation = () => setIsSimulating(true);
-  const stopSimulation = () => setIsSimulating(false);
+  
+  const stopSimulation = () => {
+    setIsSimulating(false);
+    const summary = generateEmotionSummary();
+    setEmotionSummary(summary);
+  };
   
   return {
     currentEmotion,
     emotionHistory,
+    emotionSummary,
     processAudioData,
     isSimulating,
     startSimulation,
-    stopSimulation
+    stopSimulation,
+    resetEmotionSummary: () => setEmotionSummary(null)
   };
 }

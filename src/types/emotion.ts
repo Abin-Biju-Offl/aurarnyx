@@ -12,3 +12,10 @@ export interface EmotionHistory {
   fear: EmotionData[];
   neutral: EmotionData[];
 }
+
+export interface EmotionSummary {
+  overallConfidence: number;
+  overallFear: number;
+  overallNeutral: number;
+  suggestions: string[];
+}
