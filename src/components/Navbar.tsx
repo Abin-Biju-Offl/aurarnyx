@@ -31,9 +31,19 @@ export function Navbar() {
                 Analysis
               </Button>
             </Link>
+            <Link to="/contact">
+              <Button variant={location.pathname === '/contact' ? 'secondary' : 'ghost'}>
+                Contact
+              </Button>
+            </Link>
           </nav>
           <ModeToggle />
         </div>
+      </div>
+      <div className="container">
+        <p className="text-xs text-muted-foreground text-right py-1">
+          © 2025 Aurarnyx. All Rights Reserved. Created by Abin Biju.
+        </p>
       </div>
     </div>
   );

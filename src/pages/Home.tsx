@@ -11,13 +11,6 @@ import {
   Database
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { 
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -186,66 +179,6 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </motion.div>
-
-        <motion.div 
-          className="mt-24"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-        >
-          <h2 className="text-3xl font-bold text-center mb-12">Testimonials</h2>
-          
-          <Carousel className="mx-auto max-w-4xl">
-            <CarouselContent>
-              <CarouselItem>
-                <div className="p-6">
-                  <Card className="border-0 shadow-lg">
-                    <CardContent className="pt-6 pb-6">
-                      <p className="text-lg italic mb-4">
-                        "Aurarnyx helped me identify patterns of uncertainty in my voice that I wasn't 
-                        even aware of. After following the suggestions for just two weeks, my team 
-                        noticed a significant improvement in my presentation confidence."
-                      </p>
-                      <div className="font-medium">Sarah K., Marketing Director</div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-              
-              <CarouselItem>
-                <div className="p-6">
-                  <Card className="border-0 shadow-lg">
-                    <CardContent className="pt-6 pb-6">
-                      <p className="text-lg italic mb-4">
-                        "As someone who struggles with public speaking anxiety, this tool gave me 
-                        concrete data on when my voice shows fear. The real-time feedback has been 
-                        invaluable for my professional development."
-                      </p>
-                      <div className="font-medium">Michael T., Software Engineer</div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-              
-              <CarouselItem>
-                <div className="p-6">
-                  <Card className="border-0 shadow-lg">
-                    <CardContent className="pt-6 pb-6">
-                      <p className="text-lg italic mb-4">
-                        "I've tried several speech coaching apps, but Aurarnyx's focus on confidence 
-                        metrics specifically has made a measurable difference in how I'm perceived 
-                        during client meetings."
-                      </p>
-                      <div className="font-medium">Elena R., Financial Advisor</div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-            <CarouselPrevious className="left-0" />
-            <CarouselNext className="right-0" />
-          </Carousel>
         </motion.div>
 
         <motion.div 
